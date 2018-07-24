@@ -1,22 +1,20 @@
 module Settings
-  extend self
-
-  class Settings
+  class SettingsClass
     def to_s
       cfg_str = ""
       {% begin %}
-          {% for var in @type.instance_vars %}
+        {% for var in @type.instance_vars %}
           cfg_str += @{{var}}.nil? ? "" : "{{var}}=#{@{{var}}}\n"
-          {% end %}
+        {% end %}
       {% end %}
     end
 
-    def Settings.from_s(string) : Settings
+    def SettingsClass.from_s(string) : SettingsClass
       constructor_args = {} of String => String
 
       lines = string.split '\n'
       lines.each do |line|
-        if line != "" && line.at(0) != '#' # skip commented lines
+        if line != "" && line.at(0) != '#' # skip commented and empty lines
           key, val = line.split '='
           constructor_args[key] = val
         end
